@@ -7,39 +7,39 @@ Une annonce peut avoir entre 0 et plusieurs tags
 Un tag peut correspondre à plusieurs annonces
 */
 
--- Suppression des tables existantes
+
 DROP TABLE IF EXISTS Ad_Tag;
-DROP TABLE IF EXISTS AD;
+DROP TABLE IF EXISTS Ad;
 DROP TABLE IF EXISTS Tag;
 DROP TABLE IF EXISTS Category;
 
 PRAGMA foreign_keys = ON;
 
--- Création de la table Category
+
 CREATE TABLE Category (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
--- Insertion des catégories
+
 INSERT INTO Category (name) VALUES
 ('Other'),
 ('Vehicule'),
 ('Hifi');
 
--- Création de la table Tag
+
 CREATE TABLE Tag (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
--- Insertion des tags
+
 INSERT INTO Tag (name) VALUES
 ('New'),
 ('Occasion');
 
--- Création de la table AD (annonces)
-CREATE TABLE AD (
+
+CREATE TABLE ad (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     description TEXT,
@@ -52,8 +52,7 @@ CREATE TABLE AD (
     FOREIGN KEY (category_id) REFERENCES Category(id) ON DELETE CASCADE
 );
 
--- Insertion des annonces avec catégorie obligatoire
-INSERT INTO AD (TITLE, DESCRIPTION, OWNER, PRICE, CREATEDAT, PICTURE, LOCATION, category_id) VALUES
+INSERT INTO ad (TITLE, DESCRIPTION, OWNER, PRICE, CREATEDAT, PICTURE, LOCATION, category_id) VALUES
     ('Vélo à vendre', 'Vélo en bon état, peu servi', 'john.doe@gmail.com', 150, '2024-03-19', NULL, 'Paris', 2),
     ('Voiture d''occasion', 'Voiture très bien entretenue', 'jane.smith@gmail.com', 5000, '2024-03-18', 'https://example.com/image1.jpg', 'Lyon', 2),
     ('Stylo plume', 'Stylo plume Parker, encre bleue', 'writer.seller@gmail.com', 15, '2024-09-01', NULL, 'Bordeaux', 1),
@@ -76,43 +75,42 @@ INSERT INTO AD (TITLE, DESCRIPTION, OWNER, PRICE, CREATEDAT, PICTURE, LOCATION, 
     ('Trousse scolaire', 'Trousse avec 5 stylos et règle', 'school.seller@gmail.com', 8, '2024-09-02', NULL, 'Bordeaux', 1);
 
 
--- Création de la table de liaison Ad_Tag
-CREATE TABLE Ad_Tag (
+CREATE TABLE ad_Tag (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     ad_id INTEGER NOT NULL,
     tag_id INTEGER NOT NULL,
-    FOREIGN KEY (ad_id) REFERENCES AD(id) ON DELETE CASCADE,
+    FOREIGN KEY (ad_id) REFERENCES ad(id) ON DELETE CASCADE,
     FOREIGN KEY (tag_id) REFERENCES Tag(id) ON DELETE CASCADE
 );
 
--- ajout de tags aux annonces
-INSERT INTO Ad_Tag (ad_id, tag_id) VALUES
-(1, 1), -- Vélo à vendre - "New"
-(2, 2), -- Voiture d'occasion - "Occasion"
-(3, 1), -- Stylo plume - "New"
-(4, 2), -- Chaise pliante - "Occasion"
-(5, 1); -- Lampe de chevet - "New"
 
-SELECT AD.id, AD.title, COALESCE(Tag.name, 'Aucun tag') AS tag_name
-FROM AD
-LEFT JOIN Ad_Tag ON AD.id = Ad_Tag.ad_id
-LEFT JOIN Tag ON Ad_Tag.tag_id = Tag.id;
+INSERT INTO ad_Tag (ad_id, tag_id) VALUES
+(1, 1), 
+(2, 2), 
+(3, 1), 
+(4, 2), 
+(5, 1); 
+
+-- SELECT Ad.id, Ad.title, COALESCE(Tag.name, 'Aucun tag') AS tag_name
+-- FROM Ad
+-- LEFT JOIN Ad_Tag ON Ad.id = Ad_Tag.ad_id
+-- LEFT JOIN Tag ON Ad_Tag.tag_id = Tag.id;
 
 
-SELECT AD.id, AD.title, Tag.name AS tag_name
-FROM AD
-INNER JOIN Ad_Tag ON AD.id = Ad_Tag.ad_id
-INNER JOIN Tag ON Ad_Tag.tag_id = Tag.id;
+-- SELECT AD.id, AD.title, Tag.name AS tag_name
+-- FROM AD
+-- INNER JOIN Ad_Tag ON AD.id = Ad_Tag.ad_id
+-- INNER JOIN Tag ON Ad_Tag.tag_id = Tag.id;
 
-SELECT AD.id, AD.title, Tag.name AS tag_name
-FROM AD
-INNER JOIN Ad_Tag ON AD.id = Ad_Tag.ad_id
-INNER JOIN Tag ON Ad_Tag.tag_id = Tag.id;
+-- SELECT AD.id, AD.title, Tag.name AS tag_name
+-- FROM AD
+-- INNER JOIN Ad_Tag ON AD.id = Ad_Tag.ad_id
+-- INNER JOIN Tag ON Ad_Tag.tag_id = Tag.id;
 
-select * from ad_tag;
+-- select * from ad_tag;
 
-select * from ad join category on ad.id = category.id;
+-- select * from ad join category on ad.id = category.id;
 
-select price from ad;
+-- select price from ad;
 
-Select price from ad right join category on category_id = ad.id;
+-- Select price from ad right join category on category_id = ad.id;
