@@ -7,7 +7,7 @@ POST http://localhost:3000/ads
 Content-Type: application/json
 
 {
-  "title": "My New Car 2",
+  "title": "My New Car 5",
   "description": "Still works great, I just got a new one.",
   "owner": "test@example.com",
   "price": 5000,
@@ -15,7 +15,14 @@ Content-Type: application/json
   "picture": "https://example.com/car.jpg",
   "location": "Paris",
   "category": 1,
-  "tag": [1, 2]
+  "tags": [
+    {
+      "id": 2
+    },
+    {
+      "id": 3
+    }
+  ]
 }
 
 ###

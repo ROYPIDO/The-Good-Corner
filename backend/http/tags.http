@@ -11,7 +11,7 @@ POST http://localhost:3000/tags
 Content-Type: application/json
 
 {
-  "name": "Smartphone"
+  "title": "Smartphone"
 }
 
 ###
@@ -20,10 +20,9 @@ PUT http://localhost:3000/tags/1
 Content-Type: application/json
 
 {
-  "name": "Updated Smartphone"
+  "title": "Updated Smartphone"
 }
 
 ###
 
-### Delete a tag
 DELETE http://localhost:3000/tags/1
