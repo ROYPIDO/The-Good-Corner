@@ -39,7 +39,7 @@ INSERT INTO Tag (name) VALUES
 ('Occasion');
 
 
-CREATE TABLE ad (
+CREATE TABLE Ad (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     description TEXT,
@@ -75,21 +75,36 @@ INSERT INTO ad (TITLE, DESCRIPTION, OWNER, PRICE, CREATEDAT, PICTURE, LOCATION, 
     ('Trousse scolaire', 'Trousse avec 5 stylos et règle', 'school.seller@gmail.com', 8, '2024-09-02', NULL, 'Bordeaux', 1);
 
 
-CREATE TABLE ad_Tag (
+CREATE TABLE Ad_Tag (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     ad_id INTEGER NOT NULL,
     tag_id INTEGER NOT NULL,
-    FOREIGN KEY (ad_id) REFERENCES ad(id) ON DELETE CASCADE,
+    FOREIGN KEY (ad_id) REFERENCES Ad(id) ON DELETE CASCADE,
     FOREIGN KEY (tag_id) REFERENCES Tag(id) ON DELETE CASCADE
 );
 
 
-INSERT INTO ad_Tag (ad_id, tag_id) VALUES
-(1, 1), 
-(2, 2), 
-(3, 1), 
-(4, 2), 
-(5, 1); 
+INSERT INTO Ad_Tag (ad_id, tag_id) VALUES
+(1, 1),
+(2, 2),
+(3, 1),
+(4, 2),
+(5, 1),
+(6, 2),
+(7, 2),
+(8, 2),
+(9, 2),
+(10, 1),
+(11, 2),
+(12, 1),
+(13, 2),
+(14, 2),
+(15, 1),
+(16, 2),
+(17, 1),
+(18, 2),
+(19, 2),
+(20, 1);
 
 -- SELECT Ad.id, Ad.title, COALESCE(Tag.name, 'Aucun tag') AS tag_name
 -- FROM Ad

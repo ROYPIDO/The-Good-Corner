@@ -10,9 +10,13 @@ export const dataSource = new DataSource({
   database: "good_corner.sqlite",
   entities: [Ad, Category, Tag],
   synchronize: true,
-  logging : ["error", "query"]
+  logging: ["error", "query"],
+  extra: {
+    busyTimeout: 5000 
+  }
 });
 
-export default DataSource
+
+export default dataSource
 
 

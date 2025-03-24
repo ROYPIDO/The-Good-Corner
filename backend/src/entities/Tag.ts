@@ -1,9 +1,9 @@
-import { 
-    BaseEntity, 
-    Column, 
-    Entity, 
-    PrimaryGeneratedColumn, 
-    ManyToMany 
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    ManyToMany,
+    PrimaryGeneratedColumn,
   } from "typeorm";
   import Ad from "./Ad";
   
@@ -13,15 +13,10 @@ import {
     id: number;
   
     @Column()
-    new: boolean;
+    title: string;
   
-    @Column()
-    ocassion: boolean;
-  
-
     @ManyToMany(() => Ad, (ad) => ad.tags)
     ads: Ad[];
   }
   
   export default Tag;
-  

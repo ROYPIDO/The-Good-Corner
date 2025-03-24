@@ -2,12 +2,11 @@ import {
   BaseEntity,
   Column,
   Entity,
-  PrimaryGeneratedColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
-  JoinTable,
+  PrimaryGeneratedColumn,
 } from "typeorm";
-
 import Category from "./Category";
 import Tag from "./Tag";
 
@@ -16,7 +15,7 @@ class Ad extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 100 })
+  @Column()
   title: string;
 
   @Column()
@@ -37,12 +36,15 @@ class Ad extends BaseEntity {
   @Column()
   location: string;
 
-  @ManyToOne(() => Category, (category) => category.ads)  // , { eager : true, nullable: false }
+  @ManyToOne(() => Category, (category) => category.ads, {
+    nullable: false,
+    eager: true,
+  })
   category: Category;
 
-  @ManyToMany(() => Tag, (tag) => tag.ads)
+  @ManyToMany(()=> Tag, (tag) =>tag.ads, {nullable : false, eager: true})
   @JoinTable()
-  tags: Tag[];
+  tags : Tag[]
 }
 
 export default Ad;

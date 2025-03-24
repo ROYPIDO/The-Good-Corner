@@ -1,40 +1,49 @@
 
-GET http://localhost:3000/ad
+GET http://localhost:3000/ads
 
 ###
 
-POST http://localhost:3000/ad
+POST http://localhost:3000/ads
 Content-Type: application/json
 
 {
-    "title": "RENAULT",
+  "title": "My New Car 2",
+  "description": "Still works great, I just got a new one.",
+  "owner": "test@example.com",
+  "price": 5000,
+  "createdAt": "2025-03-23T10:00:00.000Z",
+  "picture": "https://example.com/car.jpg",
+  "location": "Paris",
+  "category": 1,
+  "tag": [1, 2]
+}
+
+###
+
+DELETE http://localhost:3000/ads/3
+
+###
+
+PUT http://localhost:3000/ads/4
+Content-Type: application/json
+
+{
+    "title": "This title was edited with PUT",
     "description":
       "My car is blue, working fine. I'm selling it because I've got a new one",
     "owner": "car.seller@gmail.com",
     "price": 10000,
     "picture":
       "https://www.automobile-magazine.fr/asset/cms/34973/config/28294/apres-plusieurs-prototypes-la-bollore-bluecar-a-fini-par-devoiler-sa-version-definitive.jpg",
-    "location": "Annecy",
+    "location": "Paris",
     "createdAt": "2023-10-05T10:14:15.922Z"
   }
 
 ###
 
-DELETE http://localhost:3000/ad/1
-
-###
-
-PUT http://localhost:3000/ad/25
+PUT http://localhost:3000/ads/4
 Content-Type: application/json
 
 {
-    "title": "NEW TRUCK",
-    "description":
-      "My car is blue, working fine. I'm selling it because I've got a new one",
-    "owner": "car.seller@gmail.com",
-    "price": 100007777,
-    "picture":
-      "https://www.automobile-magazine.fr/asset/cms/34973/config/28294/apres-plusieurs-prototypes-la-bollore-bluecar-a-fini-par-devoiler-sa-version-definitive.jpg",
-    "location": "LYON",
-    "createdAt": "2023-10-05T10:14:15.922Z"
+    "location": "Marseille"
   }

@@ -1,84 +1,83 @@
-import { Metadata } from "./../node_modules/libphonenumber-js/custom.d";
 import express from "express";
-import sqlite3 from "sqlite3";
-import "reflect-metadata";
-import { dataSource } from "./config/db";
+import dataSource from "./config/db";
 import Ad from "./entities/Ad";
 import Category from "./entities/Category";
 
-//const db = new sqlite3.Database("good_corner.sqlite");
-
 const port = 3000;
 const app = express();
-
 app.use(express.json());
 
-app.get("/ad", async (_req, res) => {
+const startServer = async () => {
   try {
-    const allAds = await Ad.find();
-    res.status(200).json(allAds); // Send the data if it's successfully fetched
+    await dataSource.initialize();
+    console.log("✅ Database initialized");
+
+    app.post("/ads", async (req, res) => {
+      //const ad = new Ad();
+      const ad = Ad.create(req.body)
+      ad.title = req.body.title;
+      ad.description = req.body.description;
+      ad.owner = req.body.owner;
+      ad.price = req.body.price;
+      ad.createdAt = req.body.createdAt;
+      ad.picture = req.body.picture;
+      ad.location = req.body.location;
+      ad.category = req.body.category;
+      try {
+        await ad.save();
+        res.status(201).send("ad has been created");
+      } catch (err) {
+        console.log(err);
+        res.status(500).send(err);
+      }
+    });
+
+    app.get("/ads", async (_req, res) => {
+      const allAds = await Ad.find({ relations: ["category"] });
+      res.json(allAds);
+    });
+
+    app.delete("/ads/:id", async (req, res) => {
+      try {
+        await Ad.delete({ id: Number.parseInt(req.params.id) });
+        res.send("Ad has been removed");
+      } catch (err) {
+        console.log("err", err);
+        res.status(500).send(err);
+      }
+    });
+
+    app.put("/ads/:id", async (req, res) => {
+      await Ad.update({ id: Number.parseInt(req.params.id) }, req.body);
+      res.send("Ad has been updated");
+    });
+
+    app.post("/categories", async (req, res) => {
+      const category = Category.create({ title: req.body.title });
+      await category.save();
+      res.status(201).json(category);
+    });
+
+    app.get("/categories", async (_req, res) => {
+      const categories = await Category.find();
+      res.json(categories);
+    });
+
+   
+    app.listen(port, async () => {
+      console.log(`🚀 Server running on port ${port}`);
+
+      const categories = await Category.find();
+      if (categories.length === 0) {
+        const misc = Category.create({ title: "misc" });
+        await misc.save();
+        console.log("✅ 'misc' category created");
+      }
+    });
   } catch (error) {
-    res
-      .status(500)
-      .send({ message: "Erreur lors de la récupération des annonces" });
+    console.error("❌ Database connection error:", error);
   }
-});
+};
 
-app.post("/ad", async (req, res) => {
-  const ad = new Ad();
-  ad.title = req.body.title;
-  ad.description = req.body.description;
-  ad.owner = req.body.owner;
-  ad.price = req.body.price;
-  ad.createdAt = req.body.createdAt;
-  ad.picture = req.body.picture;
-  ad.location = req.body.location;
-
-  try {
-    await ad.save();
-    res.status(201).send("Ad has been created");
-  } catch (error) {
-    res.status(500).send({ message: "Error creating ad" });
-  }
-});
-
-app.put("/ad/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  try {
-    const adFromDB = await Ad.findOneByOrFail({ id });
-    adFromDB.title = req.body.title;
-    adFromDB.description = req.body.description;
-    adFromDB.owner = req.body.owner;
-    adFromDB.price = req.body.price;
-    adFromDB.createdAt = req.body.createdAt;
-    adFromDB.picture = req.body.picture;
-    adFromDB.location = req.body.location;
-    await adFromDB.save();
-    res.send(adFromDB);
-  } catch (error) {
-    res.status(500).send({ message: "Error updating ad" });
-  }
-});
-
-app.delete("/ad/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  try {
-    await Ad.delete({ id });
-    res.send("OK");
-  } catch (error) {
-    res.status(500).send({ message: "Error deleting ad" });
-  }
-});
-
-
-
-app.listen(port, async () => {
-  console.log(`Example app listening on port ${port}`);
-  await dataSource.initialize();
-  const categories = await Category.find();
-  if (categories.length===0){
-    const misc  = new Category();
-    misc.name = "misc";
-    misc.save();
-  }
-});
+// Burada çalıştır
+startServer();
