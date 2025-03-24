@@ -1,5 +1,3 @@
-import React from "react";
-
 type AdCardProps = {
   title: string;
   imgUrl: string;
@@ -7,7 +5,7 @@ type AdCardProps = {
   link: string;
 };
 
-const AdCard: React.FC<AdCardProps> = ({ title, imgUrl, price, link }) => {
+const AdCard = ({ title , imgUrl, price, link } :AdCardProps) => {
   return (
     <div className="ad-card-container">
       <a className="ad-card-link" href={link}>
